@@ -11,7 +11,7 @@ base_url = f'https://api.telegram.org/bot{token}'
 
 naver_client_id = config('NAVER_CLIENT_ID')
 naver_client_secret = config('NAVER_CLIENT_SECRET')
-naver_url = 'https://openapi.naver.com/v1/papago/n2mt'
+
 
 headers = {
     'X-Naver-Client-Id': naver_client_id,
@@ -67,6 +67,7 @@ def telegram():
                 'target': 'fr',
                 'text': text[4:]
             }
+            naver_url = 'https://openapi.naver.com/v1/papago/n2mt'
             response = requests.post(naver_url, headers=headers, data=data).json()
             text = response.get('message').get('result').get('translatedText')
             
