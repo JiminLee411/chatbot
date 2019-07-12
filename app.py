@@ -89,7 +89,7 @@ def telegram():
             response = requests.post(naver_url, headers=headers, data=data_en).json()
             en_text = response.get('message').get('result').get('translatedText')
 
-            text = f'fr : {fr_text},\n en : {en_text}'
+            text = f'fr : {fr_text},\nen : {en_text}'
 
 
 
