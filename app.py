@@ -48,7 +48,7 @@ def telegram():
             if best.get('confidence') > 0.2:
                 text = f"{best.get('confidence')*100}만큼 {best.get('value')}를 닮으셨네요~"
             else: 
-                text = '연예인을 닮지 않았네요...'
+                text = '독보적이시네요!'
         else:
             text = '사람 아닌듯;;'
         api_url = f'{base_url}/sendMessage?chat_id={chat_id}&text={text}'
@@ -61,21 +61,51 @@ def telegram():
         text = response.get('message').get('text')
         chat_id = response.get('message').get('chat').get('id')
 
+        # if '/번역 ' == text[0:4]:
+        #     data = {
+        #         'source': 'ko',
+        #         'target': 'fr',
+        #         'text': text[4:]
+        #     }
+        #     naver_url = 'https://openapi.naver.com/v1/papago/n2mt'
+        #     response = requests.post(naver_url, headers=headers, data=data).json()
+        #     text = response.get('message').get('result').get('translatedText')
+
         if '/번역 ' == text[0:4]:
-            data = {
+            data_fr = {
                 'source': 'ko',
                 'target': 'fr',
                 'text': text[4:]
             }
             naver_url = 'https://openapi.naver.com/v1/papago/n2mt'
-            response = requests.post(naver_url, headers=headers, data=data).json()
-            text = response.get('message').get('result').get('translatedText')
-            
+            response = requests.post(naver_url, headers=headers, data=data_fr).json()
+            fr_text = response.get('message').get('result').get('translatedText')
+            data_en = {
+                'source': 'ko',
+                'target': 'en',
+                'text': text[4:]
+            }
+            naver_url = 'https://openapi.naver.com/v1/papago/n2mt'
+            response = requests.post(naver_url, headers=headers, data=data_en).json()
+            en_text = response.get('message').get('result').get('translatedText')
+
+            text = f'fr : {fr_text},\n en : {en_text}'
+
+
+
+
+
         elif '안녕' in text or 'hi' in text or '안뇽' in text:
-            text = '안녕, 나는 봇?'
+            text = '안녕, 나는 JM이야!'
 
         elif '로또' in text:
             text = sorted(random.sample(range(1, 46), 6))
+
+        elif '우울' in text or '힘들' in text or '어떡하지' in text:
+            text = '힘내 바보야~~'
+
+        elif '사랑' in text:
+            text = '나는 너를 제일 사랑해ㅎㅎ'
 
 
         # 마지막!! url 만들어서 메시지 보내기
